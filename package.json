@@ -1,0 +1,18 @@
+{
+  "name": "clinicare-management-system",
+  "version": "1.0.0",
+  "description": "Clinic Appointment, Patient & Emergency Management System",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "node server/server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "mongodb": "^6.9.0",
+    "dotenv": "^16.4.5"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

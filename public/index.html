@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Clinicare — Appointment, Patient &amp; Emergency Management</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Sidebar -->
+  <button class="menu-toggle" id="menu-toggle" aria-label="Open menu" aria-expanded="false">☰</button>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="brand-mark">+</span>
+      <span class="brand-name">Clinicare</span>
+    </div>
+    <nav class="nav">
+      <button class="nav-item active" data-view="dashboard">
+        <span class="nav-icon">◧</span> Dashboard
+      </button>
+      <button class="nav-item" data-view="appointments">
+        <span class="nav-icon">▤</span> Appointments
+      </button>
+      <button class="nav-item" data-view="patients">
+        <span class="nav-icon">◍</span> Patients
+      </button>
+      <button class="nav-item" data-view="emergency">
+        <span class="nav-icon">▲</span> Emergency Requests
+      </button>
+      <button class="nav-item" data-view="ambulances">
+        <span class="nav-icon">▭</span> Ambulances
+      </button>
+      <button class="nav-item" data-view="blood">
+        <span class="nav-icon">◆</span> Blood Bank
+      </button>
+      <button class="nav-item" data-view="hospitals">
+        <span class="nav-icon">◎</span> Hospitals &amp; Clinics
+      </button>
+    </nav>
+    <div class="sidebar-foot">
+      <p>Administrative &amp; coordination tool only.<br/>Not for medical diagnosis or treatment decisions.</p>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+
+    <!-- DASHBOARD -->
+    <section class="view active" id="view-dashboard">
+      <header class="view-header">
+        <h1>Today at a glance</h1>
+        <p class="subtitle">A quick read on appointments, emergencies and resources.</p>
+      </header>
+
+      <div class="stat-grid">
+        <div class="stat-card">
+          <span class="stat-label">Appointments today</span>
+          <span class="stat-value" id="stat-appointments-today">—</span>
+          <span class="stat-foot" id="stat-appointments-total">—</span>
+        </div>
+        <div class="stat-card urgent">
+          <span class="stat-label">Pending emergency requests</span>
+          <span class="stat-value" id="stat-pending-emergency">—</span>
+          <span class="stat-foot" id="stat-emergency-total">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Ambulances available</span>
+          <span class="stat-value" id="stat-ambulances-available">—</span>
+          <span class="stat-foot" id="stat-ambulances-total">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Registered patients</span>
+          <span class="stat-value" id="stat-patients-total">—</span>
+          <span class="stat-foot">across all departments</span>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Blood stock across all banks</h2>
+        <div class="blood-bar-grid" id="blood-bar-grid"></div>
+      </div>
+    </section>
+
+    <!-- APPOINTMENTS -->
+    <section class="view" id="view-appointments">
+      <header class="view-header">
+        <h1>Appointments</h1>
+        <p class="subtitle">Schedule, review and update patient appointments.</p>
+      </header>
+
+      <form class="inline-form" id="form-appointment">
+        <select name="patientId" required></select>
+        <input name="department" placeholder="Department" required />
+        <input name="doctor" placeholder="Doctor" required />
+        <input name="date" type="date" required />
+        <input name="time" type="time" required />
+        <button type="submit" class="btn-primary">Book appointment</button>
+      </form>
+
+      <table class="data-table">
+        <thead>
+          <tr><th>ID</th><th>Patient</th><th>Department</th><th>Doctor</th><th>Date</th><th>Time</th><th>Status</th><th></th></tr>
+        </thead>
+        <tbody id="appointments-body"></tbody>
+      </table>
+    </section>
+
+    <!-- PATIENTS -->
+    <section class="view" id="view-patients">
+      <header class="view-header">
+        <h1>Patients</h1>
+        <p class="subtitle">Basic patient records — no medical history or diagnosis stored.</p>
+      </header>
+
+      <div class="toolbar">
+        <input id="patient-search" placeholder="Search by name or patient ID…" />
+      </div>
+
+      <form class="inline-form" id="form-patient">
+        <input name="name" placeholder="Full name" required />
+        <input name="age" type="number" min="0" placeholder="Age" required />
+        <select name="gender" required>
+          <option value="">Gender</option>
+          <option>Male</option><option>Female</option><option>Other</option>
+        </select>
+        <input name="phone" placeholder="Phone" required />
+        <select name="bloodGroup" required>
+          <option value="">Blood group</option>
+          <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+          <option>O+</option><option>O-</option><option>AB+</option><option>AB-</option>
+        </select>
+        <input name="address" placeholder="Address" required />
+        <button type="submit" class="btn-primary">Add patient</button>
+      </form>
+
+      <table class="data-table">
+        <thead>
+          <tr><th>ID</th><th>Name</th><th>Age</th><th>Gender</th><th>Phone</th><th>Blood</th><th>Address</th><th></th></tr>
+        </thead>
+        <tbody id="patients-body"></tbody>
+      </table>
+    </section>
+
+    <!-- EMERGENCY -->
+    <section class="view" id="view-emergency">
+      <header class="view-header">
+        <h1>Emergency requests</h1>
+        <p class="subtitle">Log and track ambulance / emergency coordination requests.</p>
+      </header>
+
+      <form class="inline-form" id="form-emergency">
+        <input name="patientName" placeholder="Patient / caller name" required />
+        <input name="contact" placeholder="Contact number" required />
+        <input name="location" placeholder="Location" required />
+        <select name="urgency">
+          <option>Low</option><option selected>Medium</option><option>High</option>
+        </select>
+        <button type="submit" class="btn-danger">Submit emergency request</button>
+      </form>
+
+      <table class="data-table">
+        <thead>
+          <tr><th>ID</th><th>Name</th><th>Contact</th><th>Location</th><th>Urgency</th><th>Status</th><th>Logged</th><th></th></tr>
+        </thead>
+        <tbody id="emergency-body"></tbody>
+      </table>
+    </section>
+
+    <!-- AMBULANCES -->
+    <section class="view" id="view-ambulances">
+      <header class="view-header">
+        <h1>Ambulance availability</h1>
+        <p class="subtitle">Live status and coverage area for each vehicle.</p>
+      </header>
+
+      <form class="inline-form" id="form-ambulance">
+        <input name="vehicleNo" placeholder="Vehicle number" required />
+        <input name="driver" placeholder="Driver name" required />
+        <input name="area" placeholder="Coverage area" required />
+        <select name="status">
+          <option>Available</option><option>On Duty</option><option>Unavailable</option>
+        </select>
+        <button type="submit" class="btn-primary">Add ambulance</button>
+      </form>
+
+      <table class="data-table">
+        <thead>
+          <tr><th>ID</th><th>Vehicle No.</th><th>Driver</th><th>Area</th><th>Status</th><th></th></tr>
+        </thead>
+        <tbody id="ambulances-body"></tbody>
+      </table>
+    </section>
+
+    <!-- BLOOD BANK -->
+    <section class="view" id="view-blood">
+      <header class="view-header">
+        <h1>Blood bank</h1>
+        <p class="subtitle">Search availability by blood group across all registered banks.</p>
+      </header>
+
+      <div class="toolbar">
+        <select id="blood-search">
+          <option value="">All blood groups</option>
+          <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+          <option>O+</option><option>O-</option><option>AB+</option><option>AB-</option>
+        </select>
+      </div>
+
+      <div class="card-grid" id="blood-cards"></div>
+    </section>
+
+    <!-- HOSPITALS -->
+    <section class="view" id="view-hospitals">
+      <header class="view-header">
+        <h1>Hospitals &amp; clinics</h1>
+        <p class="subtitle">Nearby facilities and their specialties.</p>
+      </header>
+
+      <div class="toolbar">
+        <input id="hospital-search" placeholder="Search by name, specialty or area…" />
+      </div>
+
+      <div class="card-grid" id="hospital-cards"></div>
+    </section>
+
+  </main>
+</div>
+
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="/js/app.js"></script>
+</body>
+</html>
